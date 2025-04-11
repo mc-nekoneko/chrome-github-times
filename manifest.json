@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Times",
+  "version": "1.0",
+  "description": "GitHubの日付表示をローカル時間形式(yyyy/MM/dd hh:mm)で表示します",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["src/content.js"]
+    }
+  ],
+  "options_ui": {
+    "page": "assets/options.html",
+    "open_in_tab": false
+  },
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  }
+}
