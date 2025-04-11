@@ -7,11 +7,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "node src/scripts/build.js",
+    "postbuild": "node scripts/build.js",
     "preview": "vite preview",
-    "format": "biome format --write ./src",
-    "lint": "biome lint ./src",
-    "check": "biome check --apply ./src"
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "check": "biome check --apply .",
+    "version:update": "node scripts/update-version.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

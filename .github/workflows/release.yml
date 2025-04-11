@@ -1,0 +1,67 @@
+name: Automated Release Creation
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Build Extension
+      run: npm run build
+
+    - name: Create Release ZIP
+      run: |
+        cd dist
+        zip -r ../github-times-extension.zip *
+
+    - name: Get Previous Tag
+      id: previoustag
+      run: |
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --skip=1 --max-count=1) || echo "")
+        echo "PREVIOUS_TAG=${PREVIOUS_TAG}" >> $GITHUB_OUTPUT
+
+    - name: Generate Changelog
+      id: changelog
+      run: |
+        PREVIOUS_TAG="${{ steps.previoustag.outputs.PREVIOUS_TAG }}"
+        if [ -z "$PREVIOUS_TAG" ]; then
+          CHANGELOG=$(git log --pretty=format:"- %s" ${{ github.ref_name }})
+        else
+          CHANGELOG=$(git log --pretty=format:"- %s" ${PREVIOUS_TAG}..${{ github.ref_name }})
+        fi
+        echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Release ${{ github.ref_name }}
+        body: |
+          # GitHub Times ${{ github.ref_name }}
+
+          ## Changes
+          ${{ steps.changelog.outputs.CHANGELOG }}
+        files: |
+          github-times-extension.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

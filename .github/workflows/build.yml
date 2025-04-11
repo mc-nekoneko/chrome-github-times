@@ -1,0 +1,52 @@
+name: Build and Upload Artifacts
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Build Extension
+      run: npm run build
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: github-times-extension
+        path: dist/
+        retention-days: 14
+
+    - name: Create Release ZIP
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      run: |
+        cd dist
+        zip -r ../github-times-extension.zip *
+
+    - name: Upload Release ZIP
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: actions/upload-artifact@v3
+      with:
+        name: github-times-extension-zip
+        path: github-times-extension.zip
+        retention-days: 30 
