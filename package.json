@@ -1,6 +1,6 @@
 {
   "name": "github-times",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GitHubの日付表示をローカル時間形式で表示するChrome拡張機能",
   "private": true,
   "type": "module",
