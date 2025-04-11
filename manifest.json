@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GH Times",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "GitHubの日付表示をローカル時間形式(yyyy/MM/dd hh:mm)で表示します",
   "permissions": [
     "storage"
