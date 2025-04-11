@@ -34,12 +34,12 @@ jobs:
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       run: |
         cd dist
-        zip -r ../github-times-extension.zip *
+        zip -r ../gh-times-extension.zip *
 
     - name: Upload Release ZIP
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       uses: actions/upload-artifact@v4
       with:
-        name: github-times-extension-zip
-        path: github-times-extension.zip
+        name: gh-times-extension-zip
+        path: gh-times-extension.zip
         retention-days: 30 

@@ -29,7 +29,7 @@ jobs:
     - name: Create Release ZIP
       run: |
         cd dist
-        zip -r ../github-times-extension.zip *
+        zip -r ../gh-times-extension.zip *
 
     - name: Get Previous Tag
       id: previoustag
@@ -55,12 +55,12 @@ jobs:
       with:
         name: Release ${{ github.ref_name }}
         body: |
-          # GitHub Times ${{ github.ref_name }}
+          # GH Times ${{ github.ref_name }}
 
           ## Changes
           ${{ steps.changelog.outputs.CHANGELOG }}
         files: |
-          github-times-extension.zip
+          gh-times-extension.zip
         draft: false
         prerelease: false
       env:

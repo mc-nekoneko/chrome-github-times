@@ -1,4 +1,4 @@
-# GitHub Times
+# GH Times
 
 GitHubの日付表示をローカル時間形式（yyyy/MM/dd hh:mm）に変換するChrome拡張機能です。
 
