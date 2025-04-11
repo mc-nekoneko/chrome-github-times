@@ -262,8 +262,32 @@ function processDateElements(tzInfo) {
 
   for (const element of dateElements) {
     if (element.hasAttribute('datetime')) {
+      const elementText = element.textContent.toLowerCase().trim()
+      const shadowText = element.shadowRoot
+        ? element.shadowRoot.textContent.toLowerCase().trim()
+        : ''
+      const titleText = (element.getAttribute('title') || '').toLowerCase()
+
+      if (
+        elementText === 'now' ||
+        shadowText === 'now' ||
+        titleText.includes('now') ||
+        elementText === 'just now' ||
+        shadowText === 'just now' ||
+        titleText.includes('just now')
+      ) {
+        continue
+      }
+
       const originalDateTime = element.getAttribute('datetime')
       const date = new Date(originalDateTime)
+
+      const now = new Date()
+      const diffMs = Math.abs(now - date)
+      if (diffMs < 60000) {
+        continue
+      }
+
       const originalTitle = element.getAttribute('title') || ''
       const formattedDate = formatDate(date)
       const tzDisplay =
